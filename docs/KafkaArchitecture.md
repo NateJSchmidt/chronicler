@@ -1,0 +1,9 @@
+# Kafka architecture
+
+Kafka architecture is similar to that of the database architecture.  Essentially, every new category of streams results in a new topic in Kafka.  The category name for a set of streams will include the `:` character, which is invalid in Kafka topic names.  Therefore, the `:` will be replaced with a `-` since the category of a stream name doesn't include anything beyond the first encountered `-`.
+
+The topic is partitioned by the unique identifier of the event stream.  This allows for horizontal scaling of the number of consumers on any given topic, while still maintaining in order delivery of events for any specific stream.  It's easier to walk through an example...
+
+Let's say we have a service that is recording an event to a stream named `user:login-12345`.  The category for this stream is `user:login` and the unique identifier is `12345`.  Therefore, after recording the event, Chronicler will publish a message to a topic named `user-login`.  The payload of the message will also contain the stream name, which is what Kafka will key off of for partitioning.  In this example `user:login-12345` will get sent to partition 0 of the topic.  We then get two more events that need to be recorded, another one on stream `user:login-12345` and the first message on a different stream, `user:login-6789`.  Both messages, being of the `user:login` category will cause Chronicler to write messages to the `user-login` topic.  The second `user:login-12345` event will result in the second messasge on partion 0, while the last message received on the new stream, `user:login-6789` will result Chronicler placing a message on partition 1.
+
+One additional thing to point out is that as Chronicler receives events for new, unseen streams it will create a new topic for each new category of streams it encounters.
