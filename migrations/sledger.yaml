@@ -1,0 +1,15 @@
+sledger:
+  - forward: REVOKE ALL ON SCHEMA public FROM PUBLIC;
+  - forward: REVOKE ALL ON DATABASE chronicler FROM PUBLIC;
+  - forward: CREATE SCHEMA chronicler;
+    backward: DROP SCHEMA chronicler;
+  - forward: CREATE ROLE chronicler_role;
+    backward: DROP ROLE chronicler_role;
+  - forward: GRANT CONNECT ON DATABASE chronicler to chronicler_role;
+    backward: REVOKE CONNECT ON DATABASE chronicler from chronicler_role;
+  - forward: GRANT ALL PRIVILEGES ON SCHEMA chronicler to chronicler_role;
+    backward: REVOKE ALL PRIVILEGES ON SCHEMA chronicler from chronicler_role;
+  - forward: CREATE ROLE chronicler_user WITH LOGIN ENCRYPTED PASSWORD '${PASSWORD}';
+    backward: DROP ROLE chronicler;
+  - forward: GRANT chronicler_role TO chronicler_user;
+    backward: REVOKE chronicler_role FROM chronicler_user;
