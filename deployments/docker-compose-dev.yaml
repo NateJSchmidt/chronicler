@@ -6,6 +6,11 @@ services:
       POSTGRES_PASSWORD: password1234
     ports:
       - "5432:5432"
+    volumes:
+      - ./db-init/01-db-init.sql:/docker-entrypoint-initdb.d/01-db-init.sql:ro
+  
+  # sledger:
+  #   image: decadentsoup/sledger:latest
 
   zookeeper:
     image: 'bitnami/zookeeper:latest'

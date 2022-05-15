@@ -12,7 +12,13 @@ Chronicler is a golang program that can be run from the command line.  Chronicle
 
 `docker-compose -f deployments/docker-compose-dev.yaml up -d`
 
-Once the dependencies are up, the easiest way to run chronicler is to run the following command:
+Once everything is running, database migrations can be run via the [run-migrations.sh](/deployments/run-migrations.sh) script.  In order for migrations to work correctly, you'll need to set some environment variables.  For details, see the script.  This script can be run like:
+
+`./run-migrations.sh`
+
+Note that migrations will likely not work without the latest PR from sledger:  https://github.com/decadentsoup/sledger/pull/2.  This PR enables variable substitution in the [sledger.yaml](/migrations/sledger.yaml).
+
+After migrations have been run, the easiest way to run chronicler is to run the following command:
 
 `go run cmd/main.go`
 
