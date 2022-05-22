@@ -7,7 +7,7 @@ import (
 // DBInterface is the interface that wraps the functions chronicler uses to communicate with the database.
 type DBInterface interface {
 	// Write a single event to a given stream.
-	WriteEvent(streamName string, event string, version string) error
+	WriteEvent(streamName string, event string, uuidString string, version string) (int64, error)
 
 	// Conditionally write an event to a given stream.  If the current last event in the stream is at previousPosition,
 	// then the write will succeed; otherwise, it will fail and an error will be returned.
